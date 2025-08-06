@@ -1,77 +1,340 @@
+# 🏔️ Hüttenapp - Hüttenurlaub Organisationsapp
 
-# huettenapp
-App zur Planung der Hütten.
-=======
-# Hütten App
+Eine moderne, skalierbare Webanwendung zur Organisation von jährlichen Hüttenurlauben. Die App ermöglicht es einem Organisator (Admin) und mehreren Teilnehmern, gemeinsam einen Hüttenurlaub zu planen und zu verwalten.
 
-Dies ist das Git‑Repository für die Hütten App, mit der unser jährlicher Hüttenurlaub organisiert werden soll. Ziel ist es, eine iOS‑App zu entwickeln, mit der alle Teilnehmenden Informationen zum Urlaub einsehen, sich anmelden oder absagen und ihre Daten verwalten können. Dieser Leitfaden erklärt die Struktur des Repositories und beschreibt einen sinnvollen Ablauf für die Umsetzung.
+## 📋 Inhaltsverzeichnis
 
-## Projektüberblick
+- [Features](#-features)
+- [Technologie-Stack](#-technologie-stack)
+- [Schnellstart](#-schnellstart)
+- [Installation](#-installation)
+- [Konfiguration](#-konfiguration)
+- [API Dokumentation](#-api-dokumentation)
+- [Projektstruktur](#-projektstruktur)
+- [Sicherheit](#-sicherheit)
+- [Deployment](#-deployment)
+- [Mitwirken](#-mitwirken)
 
-Die Hütten App soll folgende Kernfunktionen bieten:
+## 🚀 Features
 
-- **Informationsseite**: Alle wichtigen Infos zur Hütte (Ort, Termin, Packliste, Ansprechpartner usw.).
-- **Anmeldung/Absage**: Teilnehmende können sich aktiv anmelden oder absagen und optionale Informationen angeben (z. B. Anreiseart, mitgebrachte Lebensmittel, Sonderwünsche).
-- **Aufenthaltsbestätigung**: Wer tatsächlich vor Ort ist, kann den Aufenthalt bestätigen, sodass die Organisator:innen einen Überblick behalten.
-- **Verwaltung**: Eine einfache Ansicht für Organisator:innen, um Teilnehmerdaten einzusehen und eventuell zu ändern.
+### Für alle Benutzer
+- **Authentifizierung**: Sichere Registrierung und Anmeldung mit E-Mail und Passwort
+- **Dashboard**: Übersichtliche Startseite mit Hütteninformationen und Zahlungsstatus
+- **Aktivitäten**: Anzeige aller geplanten Aktivitäten in Listen- oder Kalenderansicht
+- **Zahlungsstatus**: Einsicht in den eigenen Zahlungsstatus
+- **Benachrichtigungen**: Empfang wichtiger Updates und Nachrichten
 
-## Empfohlene Reihenfolge der Implementierung
+### Für Administratoren
+- **Benutzerverwaltung**: Übersicht aller Teilnehmer mit Zahlungsstatus
+- **Aktivitätsverwaltung**: Erstellen, Bearbeiten und Löschen von Aktivitäten
+- **Zahlungsmanagement**: Markieren von Zahlungen als eingegangen/offen
+- **Benachrichtigungen**: Senden von Nachrichten an einzelne oder alle Teilnehmer
 
-Um effektiv vorzugehen, empfiehlt es sich, das Projekt in kleine, überschaubare Schritte zu zerlegen. Eine mögliche Reihenfolge ist:
+## 🛠 Technologie-Stack
 
-1. **Git‑Repository einrichten**
-   - Dieses Repository anlegen und eine grundlegende Ordnerstruktur erstellen (erledigt).
-   - `.gitignore` konfigurieren, um überflüssige Dateien auszuschließen (erledigt).
+### Backend
+- **Node.js** mit **Express.js** (TypeScript)
+- **PostgreSQL** mit **Prisma ORM**
+- **JWT** für Authentifizierung
+- **bcrypt** für sichere Passwort-Hashes
+- **Zod** für Validierung
 
-2. **Xcode‑Projekt anlegen**
-   - Auf dem MacBook Xcode starten und ein neues iOS‑Projekt mit *SwiftUI* erstellen.
-   - Projektnamen z. B. `HuettenApp` wählen und sicherstellen, dass *SwiftUI* als Interface gewählt wird.
-   - Die generierten Dateien anschließend in dieses Repository integrieren (z. B. indem du den gesamten Projektordner hierher verschiebst oder diese Dateien im Finder kopierst).
+### Frontend
+- **React 18** mit **TypeScript**
+- **Vite** als Build-Tool
+- **Tailwind CSS** für Styling
+- **React Router** für Navigation
+- **Axios** für API-Kommunikation
+- **React Hook Form** mit **Zod** für Formular-Handling
 
-3. **Grundgerüst implementieren**
-   - Die Datei `HuettenAppApp.swift` enthält den Einstiegspunkt der App und bindet die `ContentView` ein (siehe Beispiel in diesem Repository).
-   - Die Datei `ContentView.swift` dient als Startansicht. Hier kannst du zunächst einen Begrüßungstext anzeigen, um sicherzustellen, dass die App läuft.
+## ⚡ Schnellstart
 
-4. **Infoscreen erstellen**
-   - Entwickle eine Ansicht, die die wichtigsten Informationen zur Hütte anzeigt (Termin, Adresse, Packliste, Regeln). Nutze einfache `VStack`/`List`‑Elemente.
+### Voraussetzungen
+- Node.js 18+ 
+- PostgreSQL 14+
+- npm oder yarn
 
-5. **Anmeldung/Absage hinzufügen**
-   - Implementiere ein Formular (z. B. mit `TextField`, `Toggle` oder `Picker`), damit sich Teilnehmende anmelden oder absagen können. Daten können vorerst lokal gespeichert werden.
-
-6. **Aufenthaltsbestätigung implementieren**
-   - Füge einen Button hinzu, mit dem Teilnehmende ihren Aufenthalt bestätigen. Diese Aktion könnte später mit einem Backend synchronisiert werden.
-
-7. **Speichermechanismus auswählen**
-   - Entscheide dich für eine Art der Datenspeicherung. Für den Anfang reicht `UserDefaults` oder eine lokale Datei. Später kannst du zu einem Cloud‑Backend wie *Firebase* wechseln, um Daten synchron zu halten.
-
-8. **Weitere Features**
-   - Gruppenkasse, Mitfahrgelegenheiten, Chat oder andere Extras können nach und nach implementiert werden. Notiere dir alle Ideen als Issues im Git‑Repository.
-
-## Lokale Entwicklung
-
-Um das Projekt zu nutzen, empfehlen wir folgende Schritte (aus Sicht deines MacBooks):
-
-```bash
-# Repository klonen (falls noch nicht geschehen)
-git clone <dein‑repository‑link>
+### 1. Repository klonen
+\`\`\`bash
+git clone <repository-url>
 cd huettenapp
+\`\`\`
 
-# Xcode‑Projekt öffnen (sofern bereits erzeugt)
-open HuettenApp.xcodeproj
-```
+### 2. Backend starten
+\`\`\`bash
+cd backend
+npm install
+cp env.example .env
+# Datenbankverbindung in .env konfigurieren
+npm run db:push
+npm run db:seed
+npm run dev
+\`\`\`
 
-Wenn noch kein Xcode‑Projekt existiert, erstelle es in Xcode und kopiere die Swift‑Dateien aus diesem Repository hinein oder ersetze sie durch die bereits generierten Dateien.
+### 3. Frontend starten
+\`\`\`bash
+cd frontend
+npm install
+npm run dev
+\`\`\`
 
-## To‑Do‑Liste (Beispiel)
+Die App ist jetzt unter http://localhost:3000 erreichbar!
 
-- [ ] Projekt in Xcode erstellen und mit diesem Repository verknüpfen
-- [ ] Grundlegende App‑Struktur testen (Begrüßungstext anzeigen)
-- [ ] Infoscreen entwerfen (Texte, Liste)
-- [ ] Anmeldeformular implementieren
-- [ ] Aufenthaltsbestätigung umsetzen
-- [ ] Datenspeicherung wählen (UserDefaults/Firebase) und integrieren
-- [ ] (Optional) Admin‑Ansicht für Organisator:innen entwickeln
-- [ ] (Optional) Zusätzliche Features (Chat, Kasse, Mitfahrgelegenheiten)
+## 📦 Installation
 
-Diese Liste soll dir helfen, den Überblick zu behalten. Passe sie nach Bedarf an und erstelle weitere Unteraufgaben, sobald die App wächst.
->>>>>>> cb2fcd7 (Initial commit with project skeleton)
+### Backend Installation
+
+\`\`\`bash
+cd backend
+npm install
+\`\`\`
+
+**Umgebungsvariablen konfigurieren:**
+\`\`\`bash
+cp env.example .env
+\`\`\`
+
+Bearbeite die `.env` Datei:
+\`\`\`env
+DATABASE_URL="postgresql://username:password@localhost:5432/huettenapp"
+JWT_SECRET="your-super-secret-jwt-key-change-in-production"
+PORT=3001
+NODE_ENV=development
+CORS_ORIGINS="http://localhost:3000"
+\`\`\`
+
+**Datenbank einrichten:**
+\`\`\`bash
+npm run db:push        # Schema in die Datenbank übertragen
+npm run db:seed         # Testdaten laden
+\`\`\`
+
+**Backend starten:**
+\`\`\`bash
+npm run dev             # Entwicklungsmodus
+npm run build           # Produktions-Build
+npm run start           # Produktionsmodus
+\`\`\`
+
+### Frontend Installation
+
+\`\`\`bash
+cd frontend
+npm install
+npm run dev             # Entwicklungsserver starten
+\`\`\`
+
+## ⚙️ Konfiguration
+
+### Backend Konfiguration
+
+Die Backend-Konfiguration erfolgt über Umgebungsvariablen in der `.env` Datei:
+
+| Variable | Beschreibung | Standard |
+|----------|--------------|----------|
+| `DATABASE_URL` | PostgreSQL Verbindungs-URL | - |
+| `JWT_SECRET` | Secret für JWT Token | - |
+| `PORT` | Server Port | 3001 |
+| `NODE_ENV` | Umgebung (development/production) | development |
+| `CORS_ORIGINS` | Erlaubte Frontend URLs | http://localhost:3000 |
+
+### Frontend Konfiguration
+
+Das Frontend verwendet Vite's Proxy-Konfiguration für API-Aufrufe. Siehe `vite.config.ts`.
+
+## 📚 API Dokumentation
+
+### Authentifizierung
+
+**POST** `/api/auth/register`
+- Benutzer registrieren
+- Body: `{ name, email, password }`
+
+**POST** `/api/auth/login`
+- Benutzer anmelden
+- Body: `{ email, password }`
+
+**GET** `/api/auth/me`
+- Aktuellen Benutzer abrufen
+- Authentifizierung erforderlich
+
+### Benutzer
+
+**GET** `/api/users`
+- Alle Benutzer abrufen (Admin only)
+
+**GET** `/api/users/payment-status`
+- Eigenen Zahlungsstatus abrufen
+
+**PUT** `/api/users/:userId/payment-status`
+- Zahlungsstatus aktualisieren (Admin only)
+
+### Aktivitäten
+
+**GET** `/api/activities`
+- Alle Aktivitäten abrufen
+
+**POST** `/api/activities`
+- Neue Aktivität erstellen (Admin only)
+
+**PUT** `/api/activities/:id`
+- Aktivität bearbeiten (Admin only)
+
+**DELETE** `/api/activities/:id`
+- Aktivität löschen (Admin only)
+
+### Benachrichtigungen
+
+**GET** `/api/notifications`
+- Eigene Benachrichtigungen abrufen
+
+**GET** `/api/notifications/unread-count`
+- Anzahl ungelesener Benachrichtigungen
+
+**POST** `/api/notifications`
+- Benachrichtigung erstellen (Admin only)
+
+**PUT** `/api/notifications/:id/read`
+- Benachrichtigung als gelesen markieren
+
+### Hütteninformationen
+
+**GET** `/api/cabin-info`
+- Hütteninformationen abrufen
+
+## 📁 Projektstruktur
+
+\`\`\`
+huettenapp/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/     # API Controller
+│   │   ├── middleware/      # Express Middleware
+│   │   ├── routes/          # API Routen
+│   │   ├── utils/           # Hilfsfunktionen
+│   │   ├── types/           # TypeScript Types
+│   │   └── index.ts         # Server Entry Point
+│   ├── prisma/
+│   │   └── schema.prisma    # Datenbankschema
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # React Komponenten
+│   │   ├── contexts/        # React Contexts
+│   │   ├── pages/           # Seiten-Komponenten
+│   │   ├── services/        # API Services
+│   │   ├── types/           # TypeScript Types
+│   │   └── App.tsx          # Haupt-App Komponente
+│   └── package.json
+└── README.md
+\`\`\`
+
+## 🔒 Sicherheit
+
+### Authentifizierung & Autorisierung
+- **JWT Tokens** für Benutzer-Sessions
+- **bcrypt** mit 12 Salt Rounds für Passwort-Hashing
+- **Role-based Access Control** (Admin/Participant)
+- Serverseitige Autorisierung auf allen geschützten Routen
+
+### Datenschutz
+- Keine Klartext-Passwörter in der Datenbank
+- Keine sensiblen Daten im Frontend-State
+- CORS-Konfiguration für erlaubte Origins
+
+### Validierung
+- **Zod** Schema-Validierung auf Backend und Frontend
+- Input-Sanitization und Error-Handling
+- SQL-Injection-Schutz durch Prisma ORM
+
+## 🌐 Deployment
+
+### Produktionsbuilds erstellen
+
+**Backend:**
+\`\`\`bash
+cd backend
+npm run build
+\`\`\`
+
+**Frontend:**
+\`\`\`bash
+cd frontend
+npm run build
+\`\`\`
+
+### Deployment-Optionen
+
+#### Render / Heroku
+1. Separate Services für Backend und Frontend
+2. PostgreSQL Addon konfigurieren
+3. Umgebungsvariablen setzen
+4. Build-Commands anpassen
+
+#### Vercel
+- Frontend: Automatic deployment via Git
+- Backend: Als separate API-Service deployen
+
+### Umgebungsvariablen für Produktion
+
+\`\`\`env
+DATABASE_URL="postgresql://prod-connection-string"
+JWT_SECRET="strong-random-secret-key"
+NODE_ENV="production"
+CORS_ORIGINS="https://your-frontend-domain.com"
+\`\`\`
+
+## 🧪 Testing
+
+### Backend Tests
+\`\`\`bash
+cd backend
+npm test
+\`\`\`
+
+### Frontend Tests
+\`\`\`bash
+cd frontend
+npm test
+\`\`\`
+
+## 🤝 Mitwirken
+
+1. Fork das Repository
+2. Erstelle einen Feature Branch (`git checkout -b feature/amazing-feature`)
+3. Committe deine Änderungen (`git commit -m 'Add amazing feature'`)
+4. Push den Branch (`git push origin feature/amazing-feature`)
+5. Öffne eine Pull Request
+
+## 📞 Support
+
+Bei Fragen oder Problemen:
+1. Überprüfe die [Dokumentation](#-api-dokumentation)
+2. Schaue in die [Issues](../../issues)
+3. Erstelle ein neues Issue mit detaillierter Beschreibung
+
+## 📄 Lizenz
+
+Dieses Projekt steht unter der MIT Lizenz. Siehe `LICENSE` für Details.
+
+---
+
+## 🔑 Demo-Accounts
+
+Für Tests stehen folgende Accounts zur Verfügung:
+
+**Admin:**
+- E-Mail: admin@huettenapp.de
+- Passwort: admin123
+
+**Teilnehmer:**
+- E-Mail: max@example.com
+- Passwort: test123
+
+**Weitere Teilnehmer:**
+- anna@example.com / test123 (nicht bezahlt)
+- tom@example.com / test123 (bezahlt)
+
+---
+
+*Entwickelt mit ❤️ für unvergessliche Hüttenurlaube*

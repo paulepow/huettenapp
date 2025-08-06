@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("PARTICIPANT")
+  hasPaid      Boolean  @default(false) @map("has_paid")
+  registeredAt DateTime @default(now()) @map("registered_at")
+
+  // Relationen
+  createdActivities Activity[]     @relation("ActivityCreator")
+  notifications     Notification[]
+  payments          Payment[]
+  markedPayments    Payment[]      @relation("PaymentMarker")
+
+  @@map("users")
+}
+
+model Activity {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  startTime   DateTime  @map("start_time")
+  endTime     DateTime? @map("end_time")
+  location    String?
+  createdBy   String    @map("created_by")
+
+  // Relationen
+  creator User @relation("ActivityCreator", fields: [createdBy], references: [id])
+
+  @@map("activities")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  title     String?
+  body      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  isRead    Boolean  @default(false) @map("is_read")
+
+  // Relationen
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Payment {
+  id       String    @id @default(cuid())
+  userId   String    @map("user_id")
+  amount   Float
+  paidAt   DateTime? @map("paid_at")
+  markedBy String?   @map("marked_by")
+
+  // Relationen
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marker User? @relation("PaymentMarker", fields: [markedBy], references: [id])
+
+  @@map("payments")
+}
+
+// SQLite unterstützt keine Enums - verwenden String mit Check in der App-Logik
+// Mögliche Werte: "ADMIN", "PARTICIPANT"
