@@ -3,6 +3,14 @@ import { prisma } from '../utils/database';
 import { validateRequest, updatePaymentStatusSchema } from '../utils/validation';
 import { AuthenticatedRequest, UserResponse, UpdatePaymentStatusRequest } from '../types';
 
+// Hilfsfunktion für Role-Type-Assertion
+const assertRole = (role: string): 'ADMIN' | 'PARTICIPANT' => {
+  if (role === 'ADMIN' || role === 'PARTICIPANT') {
+    return role;
+  }
+  throw new Error(`Invalid role: ${role}`);
+};
+
 /**
  * Alle Benutzer abrufen (nur für Admins)
  */
@@ -24,7 +32,7 @@ export const getAllUsers = async (req: AuthenticatedRequest, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     }));
@@ -67,7 +75,7 @@ export const getUserById = async (req: AuthenticatedRequest, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     };
@@ -119,7 +127,7 @@ export const updatePaymentStatus = async (req: AuthenticatedRequest, res: Respon
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     };

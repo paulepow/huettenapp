@@ -1,9 +1,16 @@
 import { Request, Response } from 'express';
-// Role ist jetzt ein String
 import { prisma } from '../utils/database';
 import { hashPassword, comparePassword, createToken } from '../utils/auth';
 import { validateRequest, loginSchema, registerSchema } from '../utils/validation';
-import { LoginRequest, RegisterRequest, UserResponse } from '../types';
+import { LoginRequest, RegisterRequest, UserResponse, AuthenticatedRequest } from '../types';
+
+// Hilfsfunktion für Role-Type-Assertion
+const assertRole = (role: string): 'ADMIN' | 'PARTICIPANT' => {
+  if (role === 'ADMIN' || role === 'PARTICIPANT') {
+    return role;
+  }
+  throw new Error(`Invalid role: ${role}`);
+};
 
 /**
  * Benutzer registrieren
@@ -41,7 +48,7 @@ export const register = async (req: Request, res: Response) => {
     const token = createToken({
       userId: user.id,
       email: user.email,
-      role: user.role
+      role: assertRole(user.role)
     });
 
     // Response ohne Passwort-Hash
@@ -49,7 +56,7 @@ export const register = async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     };
@@ -99,7 +106,7 @@ export const login = async (req: Request, res: Response) => {
     const token = createToken({
       userId: user.id,
       email: user.email,
-      role: user.role
+      role: assertRole(user.role)
     });
 
     // Response ohne Passwort-Hash
@@ -107,7 +114,7 @@ export const login = async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     };
@@ -127,9 +134,16 @@ export const login = async (req: Request, res: Response) => {
 /**
  * Aktueller Benutzer abrufen (für Token-Validierung)
  */
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = (req as any).user?.userId;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        error: 'Nicht authentifiziert',
+        message: 'Benutzer ist nicht authentifiziert'
+      });
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId }
@@ -146,7 +160,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: assertRole(user.role),
       hasPaid: user.hasPaid,
       registeredAt: user.registeredAt
     };

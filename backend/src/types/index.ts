@@ -1,4 +1,5 @@
 import { User, Activity, Notification, Payment } from '@prisma/client';
+import { Request } from 'express';
 
 // Erweiterte Types für API Responses
 export interface UserResponse {
@@ -91,6 +92,6 @@ export interface JwtPayload {
 }
 
 // Express Request erweitert um User
-export interface AuthenticatedRequest extends Express.Request {
+export interface AuthenticatedRequest extends Request {
   user?: JwtPayload;
 }
